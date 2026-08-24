@@ -617,6 +617,37 @@ const UI = (function () {
         document.getElementById('btn_generate').addEventListener('click', generate);
         document.getElementById('btn_default').addEventListener('click', resetDefaults);
 
+        // Footer Links
+        function openURL(url) {
+            try {
+                if (typeof csInterface !== 'undefined' && csInterface.openURLInDefaultBrowser) {
+                    csInterface.openURLInDefaultBrowser(url);
+                } else if (window.cep && window.cep.util && window.cep.util.openURLInDefaultBrowser) {
+                    window.cep.util.openURLInDefaultBrowser(url);
+                } else {
+                    window.open(url, '_blank');
+                }
+            } catch (e) {
+                window.open(url, '_blank');
+            }
+        }
+
+        const linkGithub = document.getElementById('link_github');
+        if (linkGithub) {
+            linkGithub.addEventListener('click', (e) => {
+                e.preventDefault();
+                openURL('https://github.com/SaidAuita/AI-Code');
+            });
+        }
+
+        const linkTools = document.getElementById('link_tools');
+        if (linkTools) {
+            linkTools.addEventListener('click', (e) => {
+                e.preventDefault();
+                openURL('https://ph-cu-s.com/tools');
+            });
+        }
+
         // Load fonts from Illustrator and restore settings
         loadInstalledFonts().then(() => {
             loadSettings();
