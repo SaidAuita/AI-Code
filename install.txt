@@ -1,0 +1,42 @@
+========================================================================
+AI Code v1.0 - Installation Guide / Инструкция по установке
+========================================================================
+
+------------------------------------------------------------------------
+WINDOWS:
+------------------------------------------------------------------------
+1. Enable CEP Debug Mode / Включение режима отладки CEP:
+   - Double-click "enable_player_debug_mode.reg" and confirm.
+   - Запустите файл "enable_player_debug_mode.reg" и подтвердите добавление в реестр.
+
+2. Copy Plugin / Копирование плагина:
+   - Press Win + R / Нажмите Win + R
+   - Paste / Вставьте:
+     %APPDATA%\Adobe\CEP\extensions\
+   - Copy the entire "AI Code" folder there.
+   - Скопируйте папку "AI Code" в открывшуюся директорию.
+
+3. Launch in Illustrator / Запуск в Illustrator:
+   - Restart Adobe Illustrator / Перезапустите Illustrator
+   - Go to / Перейдите:
+     Window -> Extensions -> AI Code
+     (или Окно -> Расширения -> AI Code / Расширения (устаревшие))
+
+------------------------------------------------------------------------
+macOS:
+------------------------------------------------------------------------
+1. Enable CEP Debug Mode / Включение режима отладки CEP:
+   Open Terminal and execute / Откройте Терминал и выполните:
+
+   defaults write com.adobe.CSXS.9 PlayerDebugMode 1; defaults write com.adobe.CSXS.10 PlayerDebugMode 1; defaults write com.adobe.CSXS.11 PlayerDebugMode 1; defaults write com.adobe.CSXS.12 PlayerDebugMode 1; defaults write com.adobe.CSXS.13 PlayerDebugMode 1; defaults write com.adobe.CSXS.14 PlayerDebugMode 1; defaults write com.adobe.CSXS.15 PlayerDebugMode 1; defaults write com.adobe.CSXS.16 PlayerDebugMode 1
+
+2. Copy Plugin / Копирование плагина:
+   - In Finder press Cmd + Shift + G / В Finder нажмите Cmd + Shift + G
+   - Enter path / Введите путь:
+     ~/Library/Application Support/Adobe/CEP/extensions/
+   - Copy the "AI Code" folder there / Скопируйте туда папку "AI Code".
+
+3. Launch in Illustrator / Запуск в Illustrator:
+   - Restart Adobe Illustrator / Перезапустите Illustrator
+   - Window -> Extensions -> AI Code
+========================================================================

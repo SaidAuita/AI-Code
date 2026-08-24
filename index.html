@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link id="hostStyle" rel="stylesheet" href="css/styles.css"/>
+    <title>AI Code v1.0</title>
+</head>
+<body class="hostElt">
+
+<div class="panel-container">
+
+    <!-- TABS -->
+    <div class="tabs-bar">
+        <button class="hostButton tab-btn active" data-tab="ean13">EAN-13</button>
+        <button class="hostButton tab-btn" data-tab="qrcode">QR Code</button>
+    </div>
+
+    <!-- LIVE PREVIEW -->
+    <div class="preview-container">
+        <div id="preview_box" class="preview-box">
+            <!-- SVG Preview Injected Here -->
+        </div>
+        <div id="status_label" class="status-badge status-ok">Ready</div>
+    </div>
+
+    <!-- TAB 1: EAN-13 -->
+    <div id="tab_content_ean" class="settings-block">
+        <div class="row">
+            <label class="prop-label">code:</label>
+            <input type="text" id="ean_input" class="hostInput text-input" value="4001234567890" maxlength="13" placeholder="12 or 13 digits"/>
+            <button id="btn_ean_calc_chk" class="hostButton" title="Calculate 13th Checksum Digit">Chk</button>
+            <button id="btn_ean_random" class="hostButton" title="Generate Random Valid Code">Rnd</button>
+        </div>
+
+        <div class="row">
+            <label class="prop-label">module:</label>
+            <input type="number" id="ean_module_w" class="hostInput num-input" step="0.01" value="0.33" title="Module X-dimension in mm (0.33 = 100%)"/>
+            <label class="prop-label">height:</label>
+            <input type="number" id="ean_bar_h" class="hostInput num-input" step="0.5" value="22.85" title="Data Bar Height in mm"/>
+        </div>
+
+        <div class="row">
+            <label class="prop-label">guard:</label>
+            <input type="number" id="ean_guard_ext" class="hostInput num-input" step="0.1" value="1.65" title="Guard bar extension in mm"/>
+            <label class="prop-label">bwr:</label>
+            <input type="number" id="ean_bwr" class="hostInput num-input" step="5" value="0" title="Bar Width Reduction in microns (e.g. 20µm)"/>
+        </div>
+
+        <!-- SCALING PRESETS -->
+        <div class="preset-row">
+            <button class="hostButton preset-btn" id="btn_preset_sc0" title="80% Scale (Module 0.264mm)">SC0 (80%)</button>
+            <button class="hostButton preset-btn" id="btn_preset_sc2" title="100% Nominal (Module 0.33mm)">SC2 (100%)</button>
+            <button class="hostButton preset-btn" id="btn_preset_sc5" title="120% Scale (Module 0.396mm)">SC5 (120%)</button>
+        </div>
+
+        <!-- FONT FAMILY SELECT -->
+        <div class="row" style="margin-top: 2px;">
+            <label class="prop-label">font:</label>
+            <select id="font_family_select" class="hostInput select-input" style="flex: 1;" title="Choose font from installed fonts in Illustrator">
+                <option value="Arial" selected>Arial (Default)</option>
+                <option value="Helvetica">Helvetica</option>
+                <option value="OCR-B">OCR-B</option>
+                <option value="Myriad Pro">Myriad Pro</option>
+            </select>
+        </div>
+
+        <!-- FONT WEIGHT BUTTONS -->
+        <div class="row">
+            <label class="prop-label">weight:</label>
+            <div class="btn-group font-weight-group">
+                <button type="button" class="hostButton group-btn font-weight-btn" data-weight="light">Light</button>
+                <button type="button" class="hostButton group-btn font-weight-btn active" data-weight="normal">Normal</button>
+                <button type="button" class="hostButton group-btn font-weight-btn" data-weight="bold">Bold</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <label class="checkbox-label" title="Show human-readable digits"><input type="checkbox" id="ean_show_text" checked/> text</label>
+            <label class="checkbox-label" style="margin-left: 4px;" title="Convert text to vector outlines"><input type="checkbox" id="ean_outline_text"/> outlines</label>
+            <label class="prop-label" style="width: auto; margin-left: auto;">size pt:</label>
+            <input type="number" id="ean_font_size" class="hostInput num-input" style="width: 40px;" step="1" value="10"/>
+        </div>
+    </div>
+
+    <!-- TAB 2: QR CODE -->
+    <div id="tab_content_qr" class="settings-block" style="display: none;">
+        <!-- TYPE SELECTOR (InDesign-like) WITH RND BUTTON -->
+        <div class="row">
+            <label class="prop-label">type:</label>
+            <select id="qr_type" class="hostInput select-input">
+                <option value="url" selected>Web Hyperlink</option>
+                <option value="plain">Plain Text</option>
+                <option value="sms">Text Message</option>
+                <option value="email">Email</option>
+                <option value="vcard">Business Card</option>
+            </select>
+            <button id="btn_qr_random" class="hostButton" title="Generate Random Realistic Sample">Rnd</button>
+        </div>
+
+        <!-- TYPE 1: WEB HYPERLINK -->
+        <div id="qr_fields_url" class="qr-type-section">
+            <div class="row">
+                <label class="prop-label">URL:</label>
+                <input type="text" id="qr_url_input" class="hostInput text-input" value="https://www.adobe.com/illustrator" placeholder="https://..."/>
+            </div>
+        </div>
+
+        <!-- TYPE 2: PLAIN TEXT -->
+        <div id="qr_fields_plain" class="qr-type-section" style="display: none;">
+            <div class="row">
+                <textarea id="qr_plain_input" class="hostInput" rows="2" placeholder="Enter plain text...">Batch #45892-A / Prod: 2026-08-24 / Exp: 2028-08-24</textarea>
+            </div>
+        </div>
+
+        <!-- TYPE 3: TEXT MESSAGE (SMS) -->
+        <div id="qr_fields_sms" class="qr-type-section" style="display: none;">
+            <div class="row">
+                <label class="prop-label">phone:</label>
+                <input type="text" id="qr_sms_phone" class="hostInput text-input" value="+1 (555) 123-4567" placeholder="+1 (555) ..."/>
+            </div>
+            <div class="row">
+                <label class="prop-label">msg:</label>
+                <input type="text" id="qr_sms_msg" class="hostInput text-input" value="Confirming order #1045" placeholder="Message text..."/>
+            </div>
+        </div>
+
+        <!-- TYPE 4: EMAIL -->
+        <div id="qr_fields_email" class="qr-type-section" style="display: none;">
+            <div class="row">
+                <label class="prop-label">to:</label>
+                <input type="email" id="qr_email_to" class="hostInput text-input" value="order@design-studio.com" placeholder="user@example.com"/>
+            </div>
+            <div class="row">
+                <label class="prop-label">subject:</label>
+                <input type="text" id="qr_email_sub" class="hostInput text-input" value="Print Order: A4 Brochure" placeholder="Subject line"/>
+            </div>
+            <div class="row">
+                <label class="prop-label">body:</label>
+                <input type="text" id="qr_email_body" class="hostInput text-input" value="Hello! Please provide a quote for 500 copies." placeholder="Email body..."/>
+            </div>
+        </div>
+
+        <!-- TYPE 5: BUSINESS CARD (vCard) -->
+        <div id="qr_fields_vcard" class="qr-type-section" style="display: none;">
+            <div class="row">
+                <label class="prop-label">name:</label>
+                <input type="text" id="vcard_fn" class="hostInput text-input" value="Alex" placeholder="First Name"/>
+                <input type="text" id="vcard_ln" class="hostInput text-input" value="Smith" placeholder="Last Name"/>
+            </div>
+            <div class="row">
+                <label class="prop-label">job/org:</label>
+                <input type="text" id="vcard_title" class="hostInput text-input" value="Art Director" placeholder="Title"/>
+                <input type="text" id="vcard_org" class="hostInput text-input" value="Vector Studio Inc." placeholder="Company"/>
+            </div>
+            <div class="row">
+                <label class="prop-label">phone:</label>
+                <input type="text" id="vcard_cell" class="hostInput text-input" value="+1 (555) 234-5678" placeholder="Cell"/>
+                <input type="text" id="vcard_work" class="hostInput text-input" value="+1 (555) 765-4321" placeholder="Work"/>
+            </div>
+            <div class="row">
+                <label class="prop-label">email:</label>
+                <input type="email" id="vcard_email" class="hostInput text-input" value="a.smith@vectorstudio.com" placeholder="Email"/>
+            </div>
+            <div class="row">
+                <label class="prop-label">web:</label>
+                <input type="text" id="vcard_url" class="hostInput text-input" value="https://vectorstudio.com" placeholder="https://website.com"/>
+            </div>
+            <div class="row">
+                <label class="prop-label">street:</label>
+                <input type="text" id="vcard_street" class="hostInput text-input" value="450 Mission St, Suite 300" placeholder="Street Address"/>
+            </div>
+            <div class="row">
+                <label class="prop-label">city/cntry:</label>
+                <input type="text" id="vcard_city" class="hostInput text-input" value="San Francisco" placeholder="City"/>
+                <input type="text" id="vcard_country" class="hostInput text-input" value="USA" placeholder="Country"/>
+                <input type="hidden" id="vcard_state" value=""/>
+                <input type="hidden" id="vcard_zip" value=""/>
+            </div>
+        </div>
+
+        <!-- QR GEOMETRY & LOGO SPACE -->
+        <div class="row">
+            <label class="prop-label">ecc:</label>
+            <select id="qr_ecc" class="hostInput select-input">
+                <option value="L">L (7%)</option>
+                <option value="M" selected>M (15%)</option>
+                <option value="Q">Q (25%)</option>
+                <option value="H">H (30% logo)</option>
+            </select>
+            <label class="prop-label">margin:</label>
+            <input type="number" id="qr_margin" class="hostInput num-input" min="0" max="10" step="1" value="4" title="Quiet zone margin in modules"/>
+        </div>
+
+        <div class="row">
+            <label class="checkbox-label" title="Leave empty center cutout area for custom logo"><input type="checkbox" id="qr_logo_cutout"/> logo space</label>
+            <label class="prop-label" style="width: auto; margin-left: auto;">size %:</label>
+            <input type="number" id="qr_logo_percent" class="hostInput num-input" style="width: 40px;" min="10" max="30" step="5" value="20" title="Logo cutout area (10% - 30% of QR code width)"/>
+        </div>
+
+        <div class="row">
+            <label class="prop-label">size mm:</label>
+            <input type="number" id="qr_total_size" class="hostInput num-input" step="1" value="25" title="Total code size in mm"/>
+            <label class="checkbox-label" style="margin-left: 8px;" title="Combine modules into single compound path"><input type="checkbox" id="qr_compound" checked/> compound</label>
+        </div>
+
+        <div class="preset-row">
+            <button class="hostButton preset-btn" id="btn_qr_15mm" title="15 mm QR Code">15 mm</button>
+            <button class="hostButton preset-btn" id="btn_qr_25mm" title="25 mm QR Code">25 mm</button>
+            <button class="hostButton preset-btn" id="btn_qr_40mm" title="40 mm QR Code">40 mm</button>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- PLACEMENT & LAYER SETTINGS -->
+    <div class="settings-block">
+        <div class="row">
+            <label class="checkbox-label" title="Create or place on specific layer"><input type="checkbox" id="add_layer" checked/> layer:</label>
+            <input type="text" id="layer_name_text" class="hostInput text-input" value="Barcodes"/>
+            <label class="checkbox-label" style="margin-left: 4px;" title="Add white background box"><input type="checkbox" id="add_bg"/> bg box</label>
+        </div>
+
+        <div class="row" style="justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+                <label class="prop-label" style="width: auto;">pos:</label>
+                <select id="pos_mode" class="hostInput select-input" style="min-width: 105px;">
+                    <option value="artboard_center" selected>Artboard Center</option>
+                    <option value="selection_center">Selection Center</option>
+                </select>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="chk_save" checked/> save
+                </label>
+                <button class="hostButton" id="btn_default" style="margin-left: 6px; padding: 1px 6px; font-size: 10px;" title="Restore default settings">default</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRIMARY ACTION -->
+    <button class="btn-generate" id="btn_generate">Generate Code</button>
+
+</div>
+
+<script src="js/libs/CSInterface.js"></script>
+<script src="js/libs/qrcode.min.js"></script>
+<script src="js/generators/ean13.js"></script>
+<script src="js/generators/qrEngine.js"></script>
+<script src="js/generators/samples.js"></script>
+<script src="js/themeManager.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/preview.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

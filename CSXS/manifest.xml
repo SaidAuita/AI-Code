@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest
+        Version="7.0"
+        ExtensionBundleId="com.aicode.panel"
+        ExtensionBundleVersion="1.0.0"
+        ExtensionBundleName="AI Code"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Author>
+        <![CDATA[AI Code Developer]]>
+    </Author>
+    <Contact mailto="">
+        <![CDATA[]]>
+    </Contact>
+    <Legal>
+        <![CDATA[]]>
+    </Legal>
+    <Abstract href="">
+        <![CDATA[
+        Generate vector EAN-13 barcodes and QR Codes directly in Adobe Illustrator
+        ]]>
+    </Abstract>
+
+    <ExtensionList>
+        <Extension Id="com.aicode.panel" Version="1.0.0"/>
+    </ExtensionList>
+
+    <ExecutionEnvironment>
+        <HostList>
+            <Host Name="ILST" Version="[17.0,99.9]"/>
+        </HostList>
+        <LocaleList>
+            <Locale Code="All"/>
+        </LocaleList>
+        <RequiredRuntimeList>
+            <RequiredRuntime Name="CSXS" Version="7.0"/>
+        </RequiredRuntimeList>
+    </ExecutionEnvironment>
+
+    <DispatchInfoList>
+        <Extension Id="com.aicode.panel">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./index.html</MainPath>
+                    <ScriptPath>./js/barcode.jsx</ScriptPath>
+                </Resources>
+                <Lifecycle>
+                    <AutoVisible>true</AutoVisible>
+                </Lifecycle>
+                <UI>
+                    <Type>Panel</Type>
+                    <Menu>AI Code v1.0</Menu>
+                    <Geometry>
+                        <Size>
+                            <Height>530</Height>
+                            <Width>250</Width>
+                        </Size>
+                        <MinSize>
+                            <Height>420</Height>
+                            <Width>230</Width>
+                        </MinSize>
+                        <MaxSize>
+                            <Height>900</Height>
+                            <Width>600</Width>
+                        </MaxSize>
+                    </Geometry>
+                    <Icons>
+                        <Icon Type="Normal">./icons/iconNormal.png</Icon>
+                        <Icon Type="RollOver">./icons/iconRollover.png</Icon>
+                        <Icon Type="Disabled">./icons/iconDisabled.png</Icon>
+                        <Icon Type="DarkNormal">./icons/iconDarkNormal.png</Icon>
+                        <Icon Type="DarkRollOver">./icons/iconDarkRollover.png</Icon>
+                    </Icons>
+                </UI>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+
+</ExtensionManifest>
